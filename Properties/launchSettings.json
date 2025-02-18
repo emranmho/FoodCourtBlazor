@@ -5,6 +5,7 @@
         "commandName": "Project",
         "dotnetRunMessages": true,
         "launchBrowser": true,
+        "hotReloadEnabled": true,
         "applicationUrl": "http://localhost:5291",
         "environmentVariables": {
           "ASPNETCORE_ENVIRONMENT": "Development"
@@ -18,6 +19,13 @@
         "environmentVariables": {
           "ASPNETCORE_ENVIRONMENT": "Development"
         }
+      },
+      "Watch": {
+        "commandName": "Executable",
+        "workingDirectory": "$(ProjectDir)",
+        "executablePath": "dotnet",
+        "commandLineArgs": "watch run debug --launch-profile http"
+        //        "commandLineArgs": "watch run --no-launch-profile --project $(ProjectFileName)"
       }
     }
   }

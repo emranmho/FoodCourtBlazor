@@ -1,6 +1,16 @@
 @page "/category"
-@inject ICategoryRepository CategoryRepository;
+@inject ICategoryService CategoryService;
 @inject IJSRuntime JsRuntime;
+
+
+<DeleteModal 
+    OnModalConfirmation="ConfirmDelete_Click"
+    Title="Are you sure you want to delete this category?"
+    ButtonClass="btn-danger"
+    ButtonText="Delete">
+    
+</DeleteModal>
+
 
 @if (IsLoading)
 {
@@ -54,7 +64,7 @@ else
 @code {
     private bool IsLoading { get; set; } = true;
     private IEnumerable<Category> Categories { get; set; } = new List<Category>();
-    
+    private Guid DeleteCategoryId { get; set; } = Guid.Empty;
     
     protected override async Task OnInitializedAsync()
     {
@@ -73,16 +83,33 @@ else
 
     private async Task LoadCategories()
     {
-        Categories = await CategoryRepository.GetAll();
+        Categories = await CategoryService.GetAllCategories();
     }
     
     private async Task DeleteCategory(Guid id)
     {
-        await CategoryRepository.Delete(id);
-        await JsRuntime.ShowNotification("error", "Category deleted successfully");
+        DeleteCategoryId = id;
+        await JsRuntime.InvokeVoidAsync("ShowConfirmationModal");
+    }
+    
+    private async Task ConfirmDelete_Click(bool isConfirmed)
+    {
         IsLoading = true;
-        await LoadCategories();
+        await JsRuntime.InvokeVoidAsync("HideConfirmationModal");
+
+        if (isConfirmed && DeleteCategoryId != Guid.Empty)
+        {
+            var result = await CategoryService.DeleteCategory(DeleteCategoryId);
+            if(result)
+                await JsRuntime.ShowNotification("success", "Category deleted successfully");
+            else
+                await JsRuntime.ShowNotification("error", "Category deletion failed");
+            await LoadCategories();
+        }
+
+        DeleteCategoryId = Guid.Empty;
         IsLoading = false;
     }
+    
 
 }

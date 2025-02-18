@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using FoodCourtBlazor.Repository;
 using FoodCourtBlazor.Repository.IRepository;
+using FoodCourtBlazor.Services;
+using FoodCourtBlazor.Services.IService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +17,12 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddCascadingAuthenticationState();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();

@@ -1,6 +1,6 @@
 @page "/category/create"
 @page "/category/update/id={id:guid}"
-@inject ICategoryRepository CategoryRepository;
+@inject ICategoryService CategoryService;
 @inject NavigationManager NavigationManager;
 @inject IJSRuntime JsRuntime;
 @if (IsLoading)
@@ -73,7 +73,7 @@ else
 
     private async Task LoadCategory(Guid id)
     {
-        Category = await CategoryRepository.Get(id);
+        Category = await CategoryService.GetCategory(id);
     }
     
     private async Task UpsertCategory()
@@ -81,12 +81,12 @@ else
         IsLoading = true;
         if (Id != Guid.Empty)
         {
-            await CategoryRepository.Update(Category);
+            await CategoryService.UpdateCategory(Category);
             await JsRuntime.ShowNotification("success", "Category updated successfully");
         }
         else
         {
-            await CategoryRepository.Create(Category);
+            await CategoryService.CreateCategory(Category);
             await JsRuntime.ShowNotification("success", "Category created successfully");
         }
         IsLoading = false;

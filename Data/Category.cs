@@ -6,5 +6,6 @@ public class Category
 {
     public Guid Id { get; set; }
     [Required(ErrorMessage = "Please enter name..")]
-    public required string Name { get; set; }
+    public string Name { get; set; }
+    
 }

@@ -26,9 +26,7 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
-    <Folder Include="Services\Extensions\" />
     <Folder Include="ViewModels\" />
-    <Folder Include="wwwroot\lib\js\" />
   </ItemGroup>
 
 </Project>

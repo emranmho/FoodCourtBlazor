@@ -45,12 +45,12 @@ public class CategoryRepository : ICategoryRepository
         return false;
     }
 
-    public async Task<Category>? Get(Guid categoryId)
+    public async Task<Category> Get(Guid categoryId)
     {
         var category = await _db.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
         if(category == null)
         {
-            return null;
+            return new Category();
         }
         return category;
     }

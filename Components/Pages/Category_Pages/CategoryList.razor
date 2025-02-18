@@ -1,0 +1,82 @@
+@page "/category"
+@inject ICategoryRepository _categoryRepository;
+
+
+@if (IsLoading)
+{
+    <div class="position-absolute w-75 h-75 d-flex flex-column bg-white justify-content-center align-items-center">
+        <img src="Images/loading.gif" alt="loading"/>
+    </div>
+}
+else
+{
+    <div class="card card-body border-0 mt-4">
+        <div class="card-header bg-black bg-gradient ml-0 py-3">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h2 class="text-white py-2">Category List</h2>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-4">
+            <div class="row pb-3">
+                <div class="col-12 text-end">
+                    <a href="category/create" class="btn btn-lg btn-secondary" style="width: 250px">Add new category</a>
+                </div>
+            </div>
+            @if (Categories.Any())
+            {
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>CName</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var category in Categories)
+                        {
+                            <tr>
+                                <td>@category.Id</td>
+                                <td>@category.Name</td>
+                                <td>
+                                    <a href="@($"category/update/id={category.Id}")" class="btn btn-sm btn-primary">Edit</a>
+                                    <button class="btn btn-sm btn-danger">Delete</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            <p>Category's List</p>
+        </div>
+    </div>
+}
+
+@code {
+    private bool IsLoading { get; set; } = true;
+    private IEnumerable<Category> Categories { get; set; } = new List<Category>();
+    
+    
+    protected override async Task OnInitializedAsync()
+    {
+        
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadCategories();
+            IsLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task LoadCategories()
+    {
+        Categories = await _categoryRepository.GetAll();
+    }
+
+}

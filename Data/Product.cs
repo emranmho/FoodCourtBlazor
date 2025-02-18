@@ -17,7 +17,7 @@ public class Product
     [ForeignKey("CategoryId")]
     public Category? Category { get; set; }
     public int? AvailableQuantity { get; set; }
-    public bool? IsAvailable { get; set; }
+    public bool? IsAvailable { get; set; } = true;
     public DateTime CreatedDate { get; set; } = DateTime.Now;
     public DateTime UpdatedDate { get; set; } = DateTime.Now;
     // public string CreatedBy { get; set; }

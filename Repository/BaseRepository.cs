@@ -16,7 +16,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         _dbSet = db.Set<T>();
     }
     
-    public async Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null, bool tracked = false)
+    public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includeProperties = null, bool tracked = false)
     {
         IQueryable<T> query;
         
@@ -45,7 +45,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         return await query.ToListAsync();
     }
 
-    public async Task<T> Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
+    public async Task<T> GetAsync(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
     {
         IQueryable<T> query;
         

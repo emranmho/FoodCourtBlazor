@@ -4,8 +4,8 @@ namespace FoodCourtBlazor.Repository.IRepository;
 
 public interface IBaseRepository<T> where T : class
 {
-    Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null, bool tracked = false);
-    Task<T> Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false);
+    Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includeProperties = null, bool tracked = false);
+    Task<T> GetAsync(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false);
     
     Task<T> Create(T entity);
     T Update(T entity);

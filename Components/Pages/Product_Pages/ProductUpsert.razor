@@ -1,8 +1,10 @@
-@page "/category/create"
-@page "/category/update/id={id:guid}"
+@page "/product/create"
+@page "/product/update/id={id:guid}"
+@inject IProductService ProductService;
 @inject ICategoryService CategoryService;
 @inject NavigationManager NavigationManager;
 @inject IJSRuntime JsRuntime;
+
 @if (IsLoading)
 {
     <div class="position-absolute w-75 h-75 d-flex flex-column bg-white justify-content-center align-items-center">
@@ -15,19 +17,59 @@ else
         <div class="card-header bg-black bg-gradient ml-0 py-3">
             <div class="row">
                 <div class="col-12 text-center">
-                    <h2 class="text-white py-2">@(Id == Guid.Empty ? "Create" : "Update") Category </h2>
+                    <h2 class="text-white py-2">@(Id == Guid.Empty ? "Create" : "Update") Product </h2>
                 </div>
             </div>
         </div>
         <div class="card-body p-4">
-            <EditForm Model="Category" FormName="CategoryUpsertForm" OnValidSubmit="UpsertCategory">
+            <EditForm Model="Product" FormName="ProductUpsertForm" OnValidSubmit="UpsertProduct">
                 <DataAnnotationsValidator/>
                 
                 <div class="border p-3 mt-4">
                     <div class="form-floating py-3 cpl-12">
-                        <InputText @bind-Value="Category.Name" class="form-control" id="Name" placeholder="Name"/>
+                        <InputText @bind-Value="Product.Name" class="form-control" id="Name" placeholder="Name"/>
                         <label for="Name">Name</label>
-                        <ValidationMessage For="@(() => Category.Name)"/>
+                        <ValidationMessage For="@(() => Product.Name)"/>
+                    </div>
+                    <div class="form-floating py-3 cpl-12">
+                        <InputText @bind-Value="Product.Description" class="form-control" id="Description" placeholder="Description"/>
+                        <label for="Description">Description</label>
+                        <ValidationMessage For="@(() => Product.Description)"/>
+                    </div>
+                    <div class="form-floating py-3 cpl-12">
+                        <InputText @bind-Value="Product.SpecialTag" class="form-control" id="SpecialTag" placeholder="SpecialTag"/>
+                        <label for="SpecialTag">SpecialTag</label>
+                        <ValidationMessage For="@(() => Product.SpecialTag)"/>
+                    </div>
+                    <div class="form-floating py-3 cpl-12">
+                        <InputNumber @bind-Value="Product.Price" class="form-control" id="Price" placeholder="Price"/>
+                        <label for="Price">Price</label>
+                        <ValidationMessage For="@(() => Product.Price)"/>
+                    </div>
+                    <div class="form-floating py-3 cpl-12">
+                        <InputText @bind-Value="Product.ImageUrl" class="form-control" id="ImageUrl" placeholder="ImageUrl"/>
+                        <label for="ImageUrl">ImageUrl</label>
+                        <ValidationMessage For="@(() => Product.ImageUrl)"/>
+                    </div>
+                    <div class="form-floating py-3 cpl-12">
+                        <InputSelect @bind-Value="Product.Category.Id" class="form-control" id="Category" placeholder="Category">
+                            @foreach (var category in Categories)
+                            {
+                                <option value="@category.Id">@category.Name</option>
+                            }
+                        </InputSelect>
+                        <label for="Name">Category</label>
+                        
+                    </div>
+                    <div class="form-floating py-3 cpl-12">
+                        <InputNumber @bind-Value="Product.AvailableQuantity" class="form-control" id="AvailableQuantity" placeholder="AvailableQuantity"/>
+                        <label for="AvailableQuantity">AvailableQuantity</label>
+                        <ValidationMessage For="@(() => Product.AvailableQuantity)"/>
+                    </div>
+                    <div class="form-floating py-3 cpl-12">
+                        <InputCheckbox @bind-Value="IsAvailableWrapper" class="" id="IsAvailable" placeholder="IsAvailable"/>
+                        <label for="IsAvailable">IsAvailable</label>
+                        <ValidationMessage For="@(() => Product.IsAvailable)"/>
                     </div>
                     <div class="row mt-3">
                         <div class="col-6 col-md-3">
@@ -36,7 +78,7 @@ else
                             </button>
                         </div>
                         <div class="col-6 col-md-3">
-                            <a href="category" class="btn btn-secondary form-control" disabled="@IsLoading">
+                            <a href="product" class="btn btn-secondary form-control" disabled="@IsLoading">
                                 <i class="bi bi-arrow-bar-left"></i> Back to List
                             </a>
                         </div>
@@ -56,41 +98,50 @@ else
     private bool IsLoading { get; set; } = true;
     
     [SupplyParameterFromForm]
-    private Category Category { get; set; } = new Category();
+    private Product Product { get; set; } = new Product();
+    
+    private IEnumerable<Category> Categories { get; set; } = new List<Category>();
+    
+    private bool IsAvailableWrapper
+    {
+        get => Product.IsAvailable ?? false;
+        set => Product.IsAvailable = value;
+    }
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            if (Id != Guid.Empty)
-            {
-                await LoadCategory(Id);
-            }
+            await LoadProductAndCategories();
             IsLoading = false;
             StateHasChanged();
         }
     }
 
-    private async Task LoadCategory(Guid id)
+    private async Task LoadProductAndCategories()
     {
-        Category = await CategoryService.GetCategory(id);
+        if (Id != Guid.Empty)
+        {
+            Product = await ProductService.GetProduct(Id);
+        }
+        Categories = await CategoryService.GetAllCategories();
     }
     
-    private async Task UpsertCategory()
+    private async Task UpsertProduct()
     {
         IsLoading = true;
         if (Id != Guid.Empty)
         {
-            await CategoryService.UpdateCategory(Category);
-            await JsRuntime.ShowNotification("success", "Category updated successfully");
+            await ProductService.UpdateProduct(Product);
+            await JsRuntime.ShowNotification("success", "Product updated successfully");
         }
         else
         {
-            await CategoryService.CreateCategory(Category);
-            await JsRuntime.ShowNotification("success", "Category created successfully");
+            await ProductService.CreateProduct(Product);
+            await JsRuntime.ShowNotification("success", "Product created successfully");
         }
         IsLoading = false;
-        NavigationManager.NavigateTo("category");
+        NavigationManager.NavigateTo("product");
     }
 
 }

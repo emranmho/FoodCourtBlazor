@@ -8,7 +8,7 @@ public class ProductService(IUnitOfWork unitOfWork) : IProductService
 {
     public async Task<IEnumerable<Product>> GetAllProducts()
     {
-        var allProducts = await unitOfWork.Product.GetAll(includeProperties:"Category");
+        var allProducts = await unitOfWork.Product.GetAllAsync(includeProperties:"Category");
         if (allProducts.Any())
         {
             return allProducts;
@@ -17,9 +17,15 @@ public class ProductService(IUnitOfWork unitOfWork) : IProductService
         return new List<Product>();
     }
 
-    public Task<Product> GetProduct(Guid productId)
+    public async Task<Product> GetProduct(Guid productId)
     {
-        throw new NotImplementedException();
+        var obj = await unitOfWork.Product.GetAsync(ca=>ca.Id == productId, includeProperties:"Category");
+        if (obj != null)
+        {
+            return obj;
+        }
+
+        return new Product();
     }
 
     public Task<bool> DeleteProduct(Guid productId)

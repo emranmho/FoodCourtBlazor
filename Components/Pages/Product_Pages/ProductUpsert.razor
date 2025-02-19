@@ -4,7 +4,7 @@
 @inject ICategoryService CategoryService;
 @inject NavigationManager NavigationManager;
 @inject IJSRuntime JsRuntime;
-
+@inject IWebHostEnvironment Environment;
 @if (IsLoading)
 {
     <div class="position-absolute w-75 h-75 d-flex flex-column bg-white justify-content-center align-items-center">
@@ -47,19 +47,35 @@ else
                         <ValidationMessage For="@(() => Product.Price)"/>
                     </div>
                     <div class="form-floating py-3 cpl-12">
-                        <InputText @bind-Value="Product.ImageUrl" class="form-control" id="ImageUrl" placeholder="ImageUrl"/>
-                        <label for="ImageUrl">ImageUrl</label>
-                        <ValidationMessage For="@(() => Product.ImageUrl)"/>
-                    </div>
-                    <div class="form-floating py-3 cpl-12">
-                        <InputSelect @bind-Value="Product.Category.Id" class="form-control" id="Category" placeholder="Category">
+                        <InputSelect @bind-Value="Product.CategoryId" class="form-control" id="Category" placeholder="Category">
+                            <option value="" disabled selected>Select Category</option>
                             @foreach (var category in Categories)
                             {
                                 <option value="@category.Id">@category.Name</option>
                             }
                         </InputSelect>
                         <label for="Name">Category</label>
-                        
+                    </div>
+                    <div class="form-floating py-3 cpl-12">
+                        @if(Product.ImageUrl == null)
+                        {
+                            <InputFile OnChange="LoadFiles" class="form-control" id="customFile"
+                                       accept="image/x-png,image/jpeg">
+
+                            </InputFile>
+                            <label for="customImage">Image</label>
+                        }
+                        @if (!string.IsNullOrEmpty(Product.ImageUrl))
+                        {
+                            <div class="row pt-3">
+                                <div class="col-3">
+                                    <img src="@Product.ImageUrl" alt="Preview" class="img-thumbnail"/>
+                                </div>
+                                <div class="col-md-9">
+                                    <i class="bi bi-trash btn btn-outline-danger" @onclick="RemoveImage">Remove</i>
+                                </div>
+                            </div>
+                        }
                     </div>
                     <div class="form-floating py-3 cpl-12">
                         <InputNumber @bind-Value="Product.AvailableQuantity" class="form-control" id="AvailableQuantity" placeholder="AvailableQuantity"/>
@@ -94,7 +110,7 @@ else
 
 @code {
     [Parameter] public Guid Id { get; set; }
-    
+
     private bool IsLoading { get; set; } = true;
     
     [SupplyParameterFromForm]
@@ -106,6 +122,14 @@ else
     {
         get => Product.IsAvailable ?? false;
         set => Product.IsAvailable = value;
+    }
+
+    private string? _directoryPath { get; set; }
+    
+    protected override Task OnInitializedAsync()
+    {
+        _directoryPath = Path.Combine(Environment.WebRootPath, "images", "Product");
+        return base.OnInitializedAsync();
     }
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -144,4 +168,39 @@ else
         NavigationManager.NavigateTo("product");
     }
 
+    private async Task LoadFiles(InputFileChangeEventArgs e)
+    {
+         IsLoading = true;
+         var file = e.File;
+         FileInfo fileInfo = new (file.Name);
+         var fileName = $"{Guid.NewGuid()}_{DateTime.UtcNow:yyyyMMdd}{fileInfo.Extension}";
+        
+         if (!Directory.Exists(_directoryPath))
+         {
+             Directory.CreateDirectory(_directoryPath);
+         }
+         var path = Path.Combine(_directoryPath, fileName);
+         await using FileStream fileStream = new (path, FileMode.Create);
+         await file.OpenReadStream(file.Size).CopyToAsync(fileStream);
+         Product.ImageUrl = $"/images/Product/{fileName}";
+         IsLoading = false;
+    }
+    
+    private void RemoveImage()
+    {
+        if(Product.ImageUrl == null)
+        {
+            return;
+        }
+        
+        var path = Path.Combine(Environment.WebRootPath, Product.ImageUrl.TrimStart('/'));
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+            Product.ImageUrl = null;
+            return;
+        }
+
+        return;
+    }
 }

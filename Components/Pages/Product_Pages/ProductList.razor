@@ -39,7 +39,6 @@ else
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>Id</th>
                             <th>Name</th>
                             <th>Price</th>
                             <th>Tag</th>
@@ -52,10 +51,9 @@ else
                         @foreach (var product in Products)
                         {
                             <tr>
-                                <td>@product.Id</td>
                                 <td>@product.Name</td>
                                 <td>@product.Price</td>
-                                <td>@product.SpecialTag</td>
+                                <td><span class="badge text-bg-info">@product.SpecialTag</span></td>
                                 <td>@product.AvailableQuantity</td>
                                 <td>@product.Category?.Name</td>
                                 <td>

@@ -1,10 +1,11 @@
 using FoodCourtBlazor.Data;
 using FoodCourtBlazor.Repository.IRepository;
 using FoodCourtBlazor.Services.IService;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace FoodCourtBlazor.Services;
 
-public class ProductService(IUnitOfWork unitOfWork) : IProductService
+public class ProductService(IUnitOfWork unitOfWork, IWebHostEnvironment environment) : IProductService
 {
     public async Task<IEnumerable<Product>> GetAllProducts()
     {
@@ -28,18 +29,75 @@ public class ProductService(IUnitOfWork unitOfWork) : IProductService
         return new Product();
     }
 
-    public Task<bool> DeleteProduct(Guid productId)
+    public async Task<bool> DeleteProduct(Guid productId)
     {
-        throw new NotImplementedException();
+        var obj = await unitOfWork.Product.GetAsync(ca => ca.Id == productId, tracked: true);
+        if (obj != null)
+        {
+            if(obj.ImageUrl != null)
+            {
+                var path = Path.Combine(environment.WebRootPath, obj.ImageUrl.TrimStart('/'));
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                }
+            }
+            await unitOfWork.Product.Remove(obj);
+            return true;
+        }
+
+        return false;
     }
 
-    public Task<Product> CreateProduct(Product product)
+    public async Task<Product> CreateProduct(Product product)
     {
-        throw new NotImplementedException();
+        product.CreatedDate = DateTime.UtcNow;
+        product.UpdatedDate = DateTime.UtcNow;
+        // product.ImageUrl = await SaveImage(product.Image);
+        var obj = await unitOfWork.Product.Create(product);
+        await unitOfWork.SaveAsync();
+        return obj;
     }
 
-    public Task<Product> UpdateProduct(Product product)
+    public async Task<Product> UpdateProduct(Product product)
     {
-        throw new NotImplementedException();
+        var obj = await unitOfWork.Product.GetAsync(ca => ca.Id == product.Id, tracked: true);
+        if (obj != null)
+        {
+            obj.Name = product.Name;
+            obj.Description = product.Description;
+            obj.SpecialTag = product.SpecialTag;
+            obj.Price = product.Price;
+            obj.CategoryId = product.CategoryId;
+            obj.AvailableQuantity = product.AvailableQuantity;
+            obj.IsAvailable = product.IsAvailable;
+            obj.UpdatedDate = DateTime.UtcNow;
+            obj.ImageUrl = product.ImageUrl;
+            await unitOfWork.SaveAsync();
+            return obj;
+        }
+
+        return product;
+    }
+    
+    private async Task<string> SaveImage(IBrowserFile? image)
+    {
+        var directoryPath = Path.Combine(environment.WebRootPath, "images", "Product");
+        
+        if (image != null)
+        {
+            FileInfo fileInfo = new (image.Name);
+            var fileName = $"{Guid.NewGuid()}_{DateTime.UtcNow:yyyyMMdd}{Path.GetExtension(fileInfo.Name)}";
+
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+            var path = Path.Combine(directoryPath, fileName);
+            await using FileStream fileStream = new (path, FileMode.Create);
+            await image.OpenReadStream(image.Size).CopyToAsync(fileStream);
+            return $"/images/Product/{fileName}";
+        }
+        return string.Empty;
     }
 }

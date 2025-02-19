@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace FoodCourtBlazor.Data;
 
@@ -14,12 +15,15 @@ public class Product
     public decimal Price { get; set; }
     public string? ImageUrl { get; set; }
     public Guid CategoryId { get; set; }
-    [ForeignKey("CategoryId")]
-    public Category? Category { get; set; }
+    [ForeignKey("CategoryId")] 
+    public Category? Category { get; set; } 
     public int? AvailableQuantity { get; set; }
     public bool? IsAvailable { get; set; } = true;
     public DateTime CreatedDate { get; set; } = DateTime.Now;
     public DateTime UpdatedDate { get; set; } = DateTime.Now;
     // public string CreatedBy { get; set; }
     // public string UpdatedBy { get; set; }
+    
+    [NotMapped]
+    public IBrowserFile? Image { get; set; }
 }

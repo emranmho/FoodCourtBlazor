@@ -12,4 +12,5 @@ public interface IBaseRepository<T> where T : class
     
     Task<bool> Any(Expression<Func<T, bool>> filter);
     Task Remove(T entity);
+    Task RemoveRange(IList<T> entity);
 }

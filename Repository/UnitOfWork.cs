@@ -10,16 +10,18 @@ public class UnitOfWork : IUnitOfWork
     
     public ICategoryRepository Category { get; private set; }
     public IProductRepository Product { get; private set; }
-    
+    public IShoppingCartRepository ShoppingCart { get; private set; }
+
     public UnitOfWork(ApplicationDbContext db)
     {
         _db = db;
         Category = new CategoryRepository(_db);
         Product = new ProductRepository(_db);
+        ShoppingCart = new ShoppingCartRepository(_db);
     }
     
-    public async Task SaveAsync()
+    public async Task<bool> SaveAsync()
     {
-        await _db.SaveChangesAsync();
+        return await _db.SaveChangesAsync() > 0;
     }
 }

@@ -1,18 +1,22 @@
-﻿@inherits LayoutComponentBase
+﻿@using FoodCourtBlazor.Utility
+@inherits LayoutComponentBase
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+    <AuthorizeView Roles="@StaticDetails.Admin_Role">
+        <div class="sidebar">
+            <NavMenu/>
+        </div>
+    </AuthorizeView>
+   
 
     <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
+        @if(_NavBarVisible)
+        {
+            <NavBar></NavBar>
+        }
 
-        <article class="content px-4">
-            @Body
-        </article>
+        @Body
     </main>
 </div>
 
@@ -21,3 +25,33 @@
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+
+@code{
+
+    private bool _NavBarVisible;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _NavBarVisible = await IsShowNavBar();
+    }
+
+    private async Task<bool> IsShowNavBar()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        
+        var user = authState.User;
+        var authenticated = user.Identity is not null && user.Identity.IsAuthenticated;
+        
+        if(!authenticated)
+        {
+            return true;
+        }
+        
+        //not show navbar to admin user
+        if(!user.IsInRole(StaticDetails.Admin_Role))
+        {
+            return true;
+        }
+        return false;
+    }
+}

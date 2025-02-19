@@ -23,7 +23,4 @@ public class Product
     public DateTime UpdatedDate { get; set; } = DateTime.Now;
     // public string CreatedBy { get; set; }
     // public string UpdatedBy { get; set; }
-    
-    [NotMapped]
-    public IBrowserFile? Image { get; set; }
 }

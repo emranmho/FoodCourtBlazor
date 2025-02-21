@@ -2,9 +2,11 @@
 @using System.Globalization
 @inject IProductService ProductService
 @inject ICategoryService CategoryService
+@inject IShoppingCartService ShoppingCartService
 @inject NavigationManager NavigationManager;
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IJSRuntime JSRuntime
+@inject IAuthService AuthService
 <PageTitle>Home</PageTitle>
 
 @if (IsLoading)
@@ -159,18 +161,24 @@ else
     
     private async Task AddProductToCart(Guid productId)
     {
-        // NavigationManager.NavigateTo($"/cart/{productId}");
-        
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        
-        var user = authState.User;
-        var authenticated = user.Identity is not null && user.Identity.IsAuthenticated;
-        
-        if(!authenticated)
+        var isAuthenticated = await AuthService.IsUserAuthenticated();
+        if(!isAuthenticated)
         {
-            NavigationManager.NavigateTo("account/login");
+            NavigationManager.NavigateTo("/Account/Login", true);
         }
         
-
+        var userId = await AuthService.GetUserIdAsync();
+        var result = await ShoppingCartService
+            .CreateOrUpdateCart(userId: userId, productId, 1);
+        
+        if(result)
+        {
+            await JSRuntime.ShowNotification("success", "Product added to cart successfully!");
+        }
+        else
+        {
+            await JSRuntime.ShowNotification("error", "Failed to add product to cart!");
+        }
+        
     }
 }

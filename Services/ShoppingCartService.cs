@@ -36,9 +36,15 @@ public class ShoppingCartService(IUnitOfWork unitOfWork) : IShoppingCartService
         throw new NotImplementedException();
     }
 
-    public Task<bool> DeleteShoppingCart(Guid shoppingCartId)
+    public async Task<bool> DeleteShoppingCart(Guid shoppingCartId)
     {
-        throw new NotImplementedException();
+        var items = await unitOfWork.ShoppingCart.GetAsync(x => x.Id == shoppingCartId, tracked:true);
+        if (items is not null)
+        {
+            await unitOfWork.ShoppingCart.Remove(items);
+        }
+
+        return await unitOfWork.SaveAsync();
     }
 
     public async Task<ShoppingCart> CreateShoppingCart(ShoppingCart shoppingCart)
@@ -50,12 +56,12 @@ public class ShoppingCartService(IUnitOfWork unitOfWork) : IShoppingCartService
 
     public async Task<bool> CreateOrUpdateCart(string userId, Guid productId, int count)
     {
-        if (string.IsNullOrWhiteSpace(userId) || productId == Guid.Empty || count < 1)
+        if (string.IsNullOrWhiteSpace(userId) || productId == Guid.Empty)
         {
             return false;
         }
         
-        var cart = await unitOfWork.ShoppingCart.GetAsync(x => x.UserId == userId && x.ProductId == productId);
+        var cart = await unitOfWork.ShoppingCart.GetAsync(x => x.UserId == userId && x.ProductId == productId, tracked:true);
         if (cart == null)
         {
             cart = new ShoppingCart

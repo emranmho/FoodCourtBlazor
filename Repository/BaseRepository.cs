@@ -93,12 +93,12 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
     public async Task Remove(T entity)
     {
         _dbSet.Remove(entity);
-        await _db.SaveChangesAsync();
+        
     }
 
     public async Task RemoveRange(IList<T> entity)
     {
         _dbSet.RemoveRange(entity);
-        await _db.SaveChangesAsync();
+        
     }
 }

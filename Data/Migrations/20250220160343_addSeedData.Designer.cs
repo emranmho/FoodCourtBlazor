@@ -3,17 +3,20 @@ using System;
 using FoodCourtBlazor.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace FoodCourtBlazor.Migrations
+namespace FoodCourtBlazor.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250220160343_addSeedData")]
+    partial class addSeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,35 +95,35 @@ namespace FoodCourtBlazor.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "875c43b8-5088-4228-a811-2c93b6597a50",
+                            Id = "af330fd5-095f-45bf-b9e7-40fd36b2b857",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d54d6b69-6999-4db9-aeaf-5a63606598e7",
+                            ConcurrencyStamp = "c7de3bdd-0f88-42bb-b9cf-6296b3c3d013",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = true,
                             Name = "Mohammodullah Emran - Admin",
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIYJdhK5hFnNeHYY3jon2h4iIZ4UHt2XfsosHrvjyLsMYksqg8dDoliCjEe8K8ZEwA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEfUxvqB4ARZ5rYJFG9dAmh0hwyuvgMzMluCiEb57Av5Wc9zix7dvS0d3HMqcp8v+A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b7ed320b-b295-478b-a102-dbaf27fe7092",
+                            SecurityStamp = "8cf9f509-bc0d-46c9-9841-454ef0945d3e",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         },
                         new
                         {
-                            Id = "0fe46ae8-fb9c-422c-ade4-1063dd71827a",
+                            Id = "baf8b808-7918-4fda-88b3-7675970f19af",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "634e3767-ebdd-49a4-9240-7c16add41895",
+                            ConcurrencyStamp = "30906e7b-bd97-42ef-a83d-67d625a848f6",
                             Email = "employee@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = true,
                             Name = "Mohammodullah Emran - Employee",
                             NormalizedEmail = "EMPLOYEE@GMAIL.COM",
                             NormalizedUserName = "EMPLOYEE@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEK881WZO3F3umvjqg2zCioBeS0wI4h9QDRwhJRMAXMDKKkuPk+gaspgav/UsnAnvLA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIjoR+zocLT3scc2bfReMzYVIq9aoKcZn9JC2/QtSfifjkiX1vJsnXE/r+DpeLH3Zw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a2769718-f87f-405c-8c44-943ce7dcc5c7",
+                            SecurityStamp = "763152c0-724d-4943-8d3c-9bf7709c737a",
                             TwoFactorEnabled = false,
                             UserName = "employee@gmail.com"
                         });
@@ -183,79 +186,6 @@ namespace FoodCourtBlazor.Migrations
                         });
                 });
 
-            modelBuilder.Entity("FoodCourtBlazor.Data.OrderCart", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("LastUpdateDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<double>("OrderTotal")
-                        .HasColumnType("double precision");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("OrderCarts");
-                });
-
-            modelBuilder.Entity("FoodCourtBlazor.Data.OrderCartDetails", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Count")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("OrderCartId")
-                        .HasColumnType("uuid");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("double precision");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderCartId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("OrderCartDetails");
-                });
-
             modelBuilder.Entity("FoodCourtBlazor.Data.Product", b =>
                 {
                     b.Property<Guid>("Id")
@@ -302,171 +232,171 @@ namespace FoodCourtBlazor.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("15931c79-9a80-4958-b02c-fd35f3c61e4d"),
+                            Id = new Guid("9f45b08e-27af-47ea-916d-eba01be1e0ca"),
                             AvailableQuantity = 100,
                             CategoryId = new Guid("11111111-1111-1111-1111-111111111111"),
-                            CreatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6374),
+                            CreatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9409),
                             Description = "Fresh and sweet yellow bananas, rich in potassium.",
                             ImageUrl = "banana.jpg",
                             IsAvailable = true,
                             Name = "Banana",
                             Price = 1.50m,
                             SpecialTag = "Organic",
-                            UpdatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6494)
+                            UpdatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9507)
                         },
                         new
                         {
-                            Id = new Guid("9c616620-eef1-42bb-bae3-097011322631"),
+                            Id = new Guid("42bfe676-28cb-478e-9506-5a1a9973231d"),
                             AvailableQuantity = 80,
                             CategoryId = new Guid("11111111-1111-1111-1111-111111111111"),
-                            CreatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6631),
+                            CreatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9618),
                             Description = "Crisp and juicy red apples.",
                             ImageUrl = "apple.jpg",
                             IsAvailable = true,
                             Name = "Apple",
                             Price = 2.00m,
                             SpecialTag = "Fresh Harvest",
-                            UpdatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6632)
+                            UpdatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9618)
                         },
                         new
                         {
-                            Id = new Guid("aa855f52-9a0d-49a5-b15d-cad6572ea4d1"),
+                            Id = new Guid("7c0461bf-04b3-4f89-b018-78d401d9a010"),
                             AvailableQuantity = 150,
                             CategoryId = new Guid("22222222-2222-2222-2222-222222222222"),
-                            CreatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6639),
+                            CreatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9630),
                             Description = "Crunchy orange carrots packed with vitamins.",
                             ImageUrl = "carrot.jpg",
                             IsAvailable = true,
                             Name = "Carrot",
                             Price = 1.20m,
                             SpecialTag = "Farm Fresh",
-                            UpdatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6640)
+                            UpdatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9631)
                         },
                         new
                         {
-                            Id = new Guid("d40654d5-edb6-4acd-9677-7fbbc58e5b62"),
+                            Id = new Guid("9e145a4b-d16e-449b-9aab-32cd72f083ed"),
                             AvailableQuantity = 120,
                             CategoryId = new Guid("22222222-2222-2222-2222-222222222222"),
-                            CreatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6648),
+                            CreatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9636),
                             Description = "Rich in iron and perfect for salads.",
                             ImageUrl = "spinach.jpg",
                             IsAvailable = true,
                             Name = "Spinach",
                             Price = 1.80m,
                             SpecialTag = "Organic",
-                            UpdatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6649)
+                            UpdatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9636)
                         },
                         new
                         {
-                            Id = new Guid("75e8c3fd-8a88-4946-ac2e-27287595edde"),
+                            Id = new Guid("c9fffa4c-fc78-42f7-a3c7-42a3bcfa9105"),
                             AvailableQuantity = 90,
                             CategoryId = new Guid("33333333-3333-3333-3333-333333333333"),
-                            CreatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6654),
+                            CreatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9641),
                             Description = "Boneless and skinless chicken breast.",
                             ImageUrl = "chicken_breast.jpg",
                             IsAvailable = true,
                             Name = "Chicken Breast",
                             Price = 7.99m,
                             SpecialTag = "Free Range",
-                            UpdatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6655)
+                            UpdatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9642)
                         },
                         new
                         {
-                            Id = new Guid("54a4f381-2733-4847-9cee-0808d2986265"),
+                            Id = new Guid("b4e23795-8423-4b08-8b6b-1b7373926ce4"),
                             AvailableQuantity = 70,
                             CategoryId = new Guid("33333333-3333-3333-3333-333333333333"),
-                            CreatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6662),
+                            CreatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9646),
                             Description = "Lean ground beef, perfect for burgers.",
                             ImageUrl = "ground_beef.jpg",
                             IsAvailable = true,
                             Name = "Ground Beef",
                             Price = 9.50m,
                             SpecialTag = "Grass-Fed",
-                            UpdatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6662)
+                            UpdatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9647)
                         },
                         new
                         {
-                            Id = new Guid("31f8522f-e957-40fc-8cd0-6a8c0e8a29ee"),
+                            Id = new Guid("0cf87550-90ad-4cbf-a87a-1b20ec4023aa"),
                             AvailableQuantity = 200,
                             CategoryId = new Guid("44444444-4444-4444-4444-444444444444"),
-                            CreatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6673),
+                            CreatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9652),
                             Description = "Fresh cow milk, high in calcium.",
                             ImageUrl = "milk.jpg",
                             IsAvailable = true,
                             Name = "Milk",
                             Price = 3.99m,
                             SpecialTag = "Full Cream",
-                            UpdatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6674)
+                            UpdatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9652)
                         },
                         new
                         {
-                            Id = new Guid("4ab0900d-1ef8-42be-827c-a53cd767b5c0"),
+                            Id = new Guid("645092f5-b562-4a8d-b9f3-d43d69a07e60"),
                             AvailableQuantity = 60,
                             CategoryId = new Guid("44444444-4444-4444-4444-444444444444"),
-                            CreatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6679),
+                            CreatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9656),
                             Description = "Sharp and aged cheddar cheese.",
                             ImageUrl = "cheddar_cheese.jpg",
                             IsAvailable = true,
                             Name = "Cheddar Cheese",
                             Price = 6.50m,
                             SpecialTag = "Aged 2 Years",
-                            UpdatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6679)
+                            UpdatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9657)
                         },
                         new
                         {
-                            Id = new Guid("b3ca2419-2b27-4b56-b059-5c55130e3434"),
+                            Id = new Guid("999d576d-05c3-45fa-8daa-12a10980b1be"),
                             AvailableQuantity = 90,
                             CategoryId = new Guid("55555555-5555-5555-5555-555555555555"),
-                            CreatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6691),
+                            CreatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9662),
                             Description = "Healthy whole wheat bread, rich in fiber.",
                             ImageUrl = "whole_wheat_bread.jpg",
                             IsAvailable = true,
                             Name = "Whole Wheat Bread",
                             Price = 2.50m,
                             SpecialTag = "Freshly Baked",
-                            UpdatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6692)
+                            UpdatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9663)
                         },
                         new
                         {
-                            Id = new Guid("dce40243-7b10-4283-9b8a-77836d999e2e"),
+                            Id = new Guid("02f3254d-e174-447f-8ee9-70f1cd792fc7"),
                             AvailableQuantity = 75,
                             CategoryId = new Guid("55555555-5555-5555-5555-555555555555"),
-                            CreatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6696),
+                            CreatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9667),
                             Description = "Flaky and buttery croissant.",
                             ImageUrl = "croissant.jpg",
                             IsAvailable = true,
                             Name = "Croissant",
                             Price = 3.00m,
                             SpecialTag = "Handmade",
-                            UpdatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6697)
+                            UpdatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9668)
                         },
                         new
                         {
-                            Id = new Guid("aaff69c6-6e49-4d07-88bb-fde305bed41d"),
+                            Id = new Guid("5d2e6f52-f86d-4b2c-ba4f-d448632a1bf8"),
                             AvailableQuantity = 130,
                             CategoryId = new Guid("66666666-6666-6666-6666-666666666666"),
-                            CreatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6702),
+                            CreatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9700),
                             Description = "Freshly squeezed orange juice, no sugar added.",
                             ImageUrl = "orange_juice.jpg",
                             IsAvailable = true,
                             Name = "Orange Juice",
                             Price = 4.50m,
                             SpecialTag = "100% Pure",
-                            UpdatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6703)
+                            UpdatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9701)
                         },
                         new
                         {
-                            Id = new Guid("6a589381-de66-436f-9468-f7cd104dd587"),
+                            Id = new Guid("1f36a06c-c3be-4184-8f71-282871162fc3"),
                             AvailableQuantity = 140,
                             CategoryId = new Guid("77777777-7777-7777-7777-777777777777"),
-                            CreatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6708),
+                            CreatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9705),
                             Description = "Crispy and salted potato chips.",
                             ImageUrl = "chips.jpg",
                             IsAvailable = true,
                             Name = "Chips",
                             Price = 2.00m,
                             SpecialTag = "Classic",
-                            UpdatedDate = new DateTime(2025, 2, 20, 18, 30, 42, 994, DateTimeKind.Utc).AddTicks(6709)
+                            UpdatedDate = new DateTime(2025, 2, 20, 16, 3, 43, 12, DateTimeKind.Utc).AddTicks(9706)
                         });
                 });
 
@@ -523,19 +453,19 @@ namespace FoodCourtBlazor.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "edf11468-7fbb-408a-ade9-e87e08009b21",
+                            Id = "98b33dba-71b3-4d10-a0f1-96119b426a84",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "4788369c-0b89-4c6d-ae25-75bd8202e648",
+                            Id = "6e344404-b5fb-4e1f-8546-74379efc5a93",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "6370ebb1-f1ff-4c6e-afde-02d511d9cb95",
+                            Id = "3e95ffcb-4f1b-463b-bc90-c950bef08072",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         });
@@ -630,13 +560,13 @@ namespace FoodCourtBlazor.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "875c43b8-5088-4228-a811-2c93b6597a50",
-                            RoleId = "edf11468-7fbb-408a-ade9-e87e08009b21"
+                            UserId = "af330fd5-095f-45bf-b9e7-40fd36b2b857",
+                            RoleId = "98b33dba-71b3-4d10-a0f1-96119b426a84"
                         },
                         new
                         {
-                            UserId = "0fe46ae8-fb9c-422c-ade4-1063dd71827a",
-                            RoleId = "6370ebb1-f1ff-4c6e-afde-02d511d9cb95"
+                            UserId = "baf8b808-7918-4fda-88b3-7675970f19af",
+                            RoleId = "3e95ffcb-4f1b-463b-bc90-c950bef08072"
                         });
                 });
 
@@ -657,36 +587,6 @@ namespace FoodCourtBlazor.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("FoodCourtBlazor.Data.OrderCart", b =>
-                {
-                    b.HasOne("FoodCourtBlazor.Data.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("FoodCourtBlazor.Data.OrderCartDetails", b =>
-                {
-                    b.HasOne("FoodCourtBlazor.Data.OrderCart", "OrderCart")
-                        .WithMany("OrderCartDetails")
-                        .HasForeignKey("OrderCartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodCourtBlazor.Data.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OrderCart");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("FoodCourtBlazor.Data.Product", b =>
@@ -768,11 +668,6 @@ namespace FoodCourtBlazor.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("FoodCourtBlazor.Data.OrderCart", b =>
-                {
-                    b.Navigation("OrderCartDetails");
                 });
 #pragma warning restore 612, 618
         }

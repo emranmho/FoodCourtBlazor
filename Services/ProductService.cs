@@ -43,7 +43,7 @@ public class ProductService(IUnitOfWork unitOfWork, IWebHostEnvironment environm
                 }
             }
             await unitOfWork.Product.Remove(obj);
-            return true;
+            return await unitOfWork.SaveAsync();
         }
 
         return false;

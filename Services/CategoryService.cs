@@ -34,10 +34,10 @@ public class CategoryService(IUnitOfWork unitOfWork) : ICategoryService
         if (obj != null)
         {
             await unitOfWork.Category.Remove(obj);
-            return true;
+            
         }
 
-        return false;
+        return await unitOfWork.SaveAsync();
     }
 
     public async Task<Category> CreateCategory(Category category)
